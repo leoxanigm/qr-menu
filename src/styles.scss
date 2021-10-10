@@ -1,4 +1,48 @@
+@import 'tailwindcss/base';
+@import 'tailwindcss/components';
+@import 'tailwindcss/utilities';
 /* You can add global styles to this file, and also import other style files */
 
-html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+* {
+  margin: 0px;
+  padding: 0px;
+  box-sizing: border-box;
+}
+
+html,
+body {
+  height: 100%;
+}
+body {
+  margin: 0;
+  font-family: Roboto, 'Helvetica Neue', sans-serif;
+}
+
+// Form styles start
+
+mat-form-field.mat-form-field {
+  @apply w-full my-2;
+
+  .mat-form-field-wrapper,
+  .mat-form-field-infix {
+    @apply p-0;
+  }
+
+  .mat-input-element {
+    @apply border-0 m-0 text-lg;
+
+    &:focus {
+      border: none;
+      outline: none;
+      box-shadow: none;
+    }
+  }
+
+  textarea.mat-input-element {
+    resize: none;
+    height: 3rem;
+    margin-bottom: 0.5rem;
+  }
+}
+
+// Form styles end

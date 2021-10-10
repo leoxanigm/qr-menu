@@ -1,0 +1,11 @@
+.app-window {
+  margin: 0px;
+
+  & > * {
+    height: 100vh;
+    padding: 20px;
+  }
+  &__edit {
+    border-right: 1px solid grey;
+  }
+}

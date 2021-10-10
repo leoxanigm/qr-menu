@@ -1,0 +1,31 @@
+<div class="form-container">
+  <h2 class="form-title">Enter Details for Menu Item</h2>
+  <form class="form">
+    <mat-form-field appearance="outline" class="form-name">
+      <mat-label>Menu Item Name</mat-label>
+      <input matInput placeholder="Item name..." />
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="form-desciption">
+      <mat-label>Menu Item Description</mat-label>
+      <textarea matInput placeholder="Item description..."></textarea>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="form-price">
+      <mat-label>Menu Item Price</mat-label>
+      <input matInput placeholder="Item price..." />
+    </mat-form-field>
+
+    <div class="form-img-upload">
+      <label for="item-img">Menu Item Image</label>
+      <input type="file" id="item-img" name="item-img" accept="image/*" />
+    </div>
+
+    <div class="form-submit">
+      <app-button
+        text="Save New Item"
+        [classList]="['bg-green-700', 'text-white']"
+      ></app-button>
+    </div>
+  </form>
+</div>

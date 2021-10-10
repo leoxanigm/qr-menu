@@ -1,0 +1,47 @@
+.card {
+  @apply w-full bg-white flex justify-between gap-x-2 divide-x divide-gray-100 my-4 rounded overflow-hidden shadow border-gray-100;
+
+  &-img {
+    @apply flex-none self-center;
+    /* width: 70px;
+    height: 70px; */
+  }
+
+  &-details {
+    @apply flex-grow px-2;
+
+    p {
+      @apply mb-1;
+    }
+
+    &-name {
+      @apply font-bold mb-1 tracking-wide;
+    }
+
+    &-price {
+      @apply text-right;
+    }
+  }
+
+  &-actions {
+    @apply flex-none self-stretch flex flex-col;
+    width: 30px;
+
+    &-edit,
+    &-delete {
+      @apply flex-grow flex justify-center items-center cursor-pointer;
+
+      &:hover {
+        @apply bg-gray-100;
+      }
+    }
+
+    &-edit {
+      @apply text-yellow-600;
+    }
+
+    &-delete {
+      @apply text-red-600;
+    }
+  }
+}

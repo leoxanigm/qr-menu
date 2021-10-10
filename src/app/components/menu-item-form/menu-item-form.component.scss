@@ -1,0 +1,26 @@
+.form-container {
+  @apply shadow p-2;
+
+  .form-title {
+    @apply mb-2;
+  }
+
+  .form {
+    &-img-upload {
+      @apply p-3 text-lg flex justify-between rounded my-3 cursor-pointer;
+
+      border: 1px solid #e0e0e0;
+    }
+
+    label,
+    input {
+      @apply text-base cursor-pointer;
+
+      color: #666;
+    }
+
+    &-submit {
+      @apply flex justify-end;
+    }
+  }
+}

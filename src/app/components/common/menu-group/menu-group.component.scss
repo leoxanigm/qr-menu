@@ -1,0 +1,53 @@
+.card {
+  @apply flex flex-col max-w-2xl mx-auto rounded overflow-hidden;
+
+  &-header {
+    @apply w-full bg-white flex justify-between gap-x-2 divide-x divide-gray-100 my-4 border-b;
+
+    margin: 0px;
+
+    &-img {
+      @apply flex-none self-center;
+    }
+
+    &-title {
+      @apply flex-grow self-center px-2;
+
+      h2 {
+        @apply font-bold mb-1 tracking-wide;
+      }
+    }
+
+    &-actions {
+      @apply flex-none self-stretch flex flex-col;
+      width: 30px;
+
+      &-edit,
+      &-delete {
+        @apply flex-grow flex justify-center items-center cursor-pointer;
+
+        
+
+        &:hover {
+          @apply bg-gray-100;
+        }
+      }
+
+      &-edit {
+        @apply text-yellow-600
+      }
+
+      &-delete {
+        @apply text-red-600
+      }
+    }
+  }
+
+  &-body {
+    @apply p-4;
+  }
+
+  &-button {
+    @apply pl-4 pb-4;
+  }
+}

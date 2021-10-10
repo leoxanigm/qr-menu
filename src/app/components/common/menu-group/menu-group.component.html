@@ -1,0 +1,22 @@
+<div class="card">
+  <div class="card-header">
+    <div class="card-header-img">
+      <img src="https://via.placeholder.com/70" alt="name" />
+    </div>
+    <div class="card-header-title">
+      <h2>Menu group Name</h2>
+    </div>
+    <div class="card-header-actions">
+      <div class="card-header-actions-edit"><mat-icon>edit</mat-icon></div>
+      <div class="card-header-actions-delete"><mat-icon>delete</mat-icon></div>
+    </div>
+  </div>
+  <div class="card-body">
+    <app-menu-item></app-menu-item>
+    <app-menu-item></app-menu-item>
+    <app-menu-item-form></app-menu-item-form>
+  </div>
+  <div class="card-button">
+    <app-button text="Add Menu Item" [classList]="['bg-blue-700', 'text-white']"></app-button>
+  </div>
+</div>

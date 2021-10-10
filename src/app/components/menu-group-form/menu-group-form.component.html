@@ -1,0 +1,21 @@
+<div class="form-container card">
+  <h2 class="form-title">Enter Details for Menu Group</h2>
+  <form class="form">
+    <mat-form-field appearance="outline" class="form-name">
+      <mat-label>Menu Group Name</mat-label>
+      <input matInput placeholder="Starter, Main Course..." />
+    </mat-form-field>
+
+    <div class="form-img-upload">
+      <label for="group-img">Menu Group Image</label>
+      <input type="file" id="group-img" name="group-img" accept="image/*" />
+    </div>
+
+    <div class="form-submit">
+      <app-button
+        text="Save New Group"
+        [classList]="['bg-green-700', 'text-white']"
+      ></app-button>
+    </div>
+  </form>
+</div>

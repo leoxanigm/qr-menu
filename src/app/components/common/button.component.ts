@@ -1,10 +1,12 @@
 import {
   Component,
+  ElementRef,
   EventEmitter,
   Input,
   OnDestroy,
   OnInit,
-  Output
+  Output,
+  ViewChild
 } from '@angular/core';
 
 @Component({
@@ -14,12 +16,11 @@ import {
       mat-raised-button
       type="button"
       [class]="classList"
-      (click)="onClick()"
+      (click)="onClick($event)"
     >
       {{ text }}
     </button>
-  `,
-  styles: ['button:focus {background: none !important}']
+  `
 })
 export class ButtonComponent implements OnInit, OnDestroy {
   @Input() text!: string;
@@ -35,7 +36,7 @@ export class ButtonComponent implements OnInit, OnDestroy {
     this.onButtonClick.unsubscribe();
   }
 
-  onClick() {
+  onClick(event: MouseEvent) {
     this.onButtonClick.emit();
   }
 }
