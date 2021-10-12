@@ -7,14 +7,14 @@
 
   .form {
     &-img-upload {
-      @apply p-3 text-lg flex justify-between rounded my-3 cursor-pointer;
+      @apply text-lg flex justify-between rounded my-3 cursor-pointer;
 
       border: 1px solid #e0e0e0;
     }
 
     label,
     input {
-      @apply text-base cursor-pointer;
+      @apply text-base cursor-pointer p-3 w-full;
 
       color: #666;
     }

@@ -1,4 +1,9 @@
 import { Injectable } from '@angular/core';
+import {
+  AngularFirestore,
+  AngularFirestoreCollection,
+  DocumentChangeAction
+} from '@angular/fire/compat/firestore';
 import { Observable, of } from 'rxjs';
 import { Menu } from '../shared/menu.interface';
 
@@ -16,10 +21,21 @@ export class MenuService {
     }
   ];
 
-  constructor() {}
+  menuId!: string;
+
+  constructor(private firebase: AngularFirestore) {}
 
   getMenus(): Observable<Menu[]> {
     return of(this.menus);
+  }
+
+  fetchMenus() {
+    this.firebase
+      .collection('menus')
+      .doc('xc43sds')
+      .collection('menu-groups')
+      .get()
+      .subscribe(docs => docs.forEach(doc => console.log(doc.id)))
   }
 
   addMenuItem(newItem: Menu) {

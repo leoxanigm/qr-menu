@@ -1,3 +1,5 @@
+import { environment } from 'src/environments/environment';
+
 // Core
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
@@ -7,6 +9,8 @@ import { AppRoutingModule } from './app-routing.module';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MaterialModules } from './shared/materials.module';
 import { ReactiveFormsModule } from '@angular/forms';
+import { AngularFireModule } from '@angular/fire/compat';
+import { AngularFirestoreModule } from '@angular/fire/compat/firestore';
 
 // Components
 import { AppComponent } from './app.component';
@@ -15,9 +19,6 @@ import { MenuItemComponent } from './components/common/menu-item/menu-item.compo
 import { MenuGroupComponent } from './components/common/menu-group/menu-group.component';
 import { MenuItemFormComponent } from './components/menu-item-form/menu-item-form.component';
 import { MenuGroupFormComponent } from './components/menu-group-form/menu-group-form.component';
-
-
-
 
 @NgModule({
   declarations: [
@@ -33,9 +34,11 @@ import { MenuGroupFormComponent } from './components/menu-group-form/menu-group-
     AppRoutingModule,
     BrowserAnimationsModule,
     MaterialModules,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    AngularFireModule.initializeApp(environment.firebase),
+    AngularFirestoreModule
   ],
   providers: [],
   bootstrap: [AppComponent]
 })
-export class AppModule { }
+export class AppModule {}

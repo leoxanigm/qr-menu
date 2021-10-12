@@ -14,7 +14,7 @@ import {
   template: `
     <button
       mat-raised-button
-      type="button"
+      [type]="actionType"
       [class]="classList"
       (click)="onClick($event)"
     >
@@ -25,6 +25,7 @@ import {
 export class ButtonComponent implements OnInit, OnDestroy {
   @Input() text!: string;
   @Input() classList!: string[];
+  @Input() actionType!: string;
 
   @Output() onButtonClick = new EventEmitter<MouseEvent>();
 

@@ -1,29 +1,40 @@
 <div class="form-container">
   <h2 class="form-title">Enter Details for Menu Item</h2>
-  <form class="form">
+  <form class="form" [formGroup]="menuItemForm" (ngSubmit)="onSubmit()">
     <mat-form-field appearance="outline" class="form-name">
       <mat-label>Menu Item Name</mat-label>
-      <input matInput placeholder="Item name..." />
+      <input matInput placeholder="Item name..." formControlName="name" />
     </mat-form-field>
 
     <mat-form-field appearance="outline" class="form-desciption">
       <mat-label>Menu Item Description</mat-label>
-      <textarea matInput placeholder="Item description..."></textarea>
+      <textarea
+        matInput
+        placeholder="Item description..."
+        formControlName="description"
+      ></textarea>
     </mat-form-field>
 
     <mat-form-field appearance="outline" class="form-price">
       <mat-label>Menu Item Price</mat-label>
-      <input matInput placeholder="Item price..." />
+      <input matInput placeholder="Item price..." formControlName="price" />
     </mat-form-field>
 
     <div class="form-img-upload">
       <label for="item-img">Menu Item Image</label>
-      <input type="file" id="item-img" name="item-img" accept="image/*" />
+      <input
+        type="file"
+        id="item-img"
+        name="item-img"
+        accept="image/*"
+        formControlName="imgSrc"
+      />
     </div>
 
     <div class="form-submit">
       <app-button
         text="Save New Item"
+        actionType="submit"
         [classList]="['bg-green-700', 'text-white']"
       ></app-button>
     </div>
