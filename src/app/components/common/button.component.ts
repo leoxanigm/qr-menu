@@ -16,6 +16,7 @@ import {
       mat-raised-button
       [type]="actionType"
       [class]="classList"
+      [disabled]="disabled"
       (click)="onClick($event)"
     >
       {{ text }}
@@ -26,6 +27,7 @@ export class ButtonComponent implements OnInit, OnDestroy {
   @Input() text!: string;
   @Input() classList!: string[];
   @Input() actionType!: string;
+  @Input() disabled = false;
 
   @Output() onButtonClick = new EventEmitter<MouseEvent>();
 

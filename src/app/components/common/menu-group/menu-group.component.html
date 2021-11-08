@@ -1,22 +1,56 @@
 <div class="card">
   <div class="card-header">
     <div class="card-header-img">
-      <img src="https://via.placeholder.com/70" alt="name" />
+      <img [src]="menuGroupData.imgSrc" [alt]="menuGroupData.name" />
     </div>
     <div class="card-header-title">
-      <h2>Menu group Name</h2>
+      <h2>{{ menuGroupData.name }}</h2>
     </div>
     <div class="card-header-actions">
-      <div class="card-header-actions-edit"><mat-icon>edit</mat-icon></div>
+      <div class="card-header-actions-edit" (click)="onEditMode()">
+        <mat-icon>edit</mat-icon>
+      </div>
       <div class="card-header-actions-delete"><mat-icon>delete</mat-icon></div>
     </div>
   </div>
+
+  <!-- TO DO: Add cancel button to form and hide card header on edit mode -->
+
+  <ng-container>
+    <app-menu-group-form
+      *ngIf="editMode"
+      [groupData]="menuGroupData"
+      [editMode]="editMode"
+    ></app-menu-group-form>
+  </ng-container>
+
   <div class="card-body">
-    <app-menu-item></app-menu-item>
-    <app-menu-item></app-menu-item>
-    <app-menu-item-form></app-menu-item-form>
+    <ng-container *ngFor="let menuItem of menuGroupData.menuItems">
+      <app-menu-item
+        [menuGroupId]="menuGroupId"
+        [menuItemData]="menuItem"
+      ></app-menu-item>
+    </ng-container>
+
+    <app-menu-item-form
+      *ngIf="addMode"
+      [menuGroupId]="menuGroupId"
+    ></app-menu-item-form>
   </div>
   <div class="card-button">
-    <app-button text="Add Menu Item" [classList]="['bg-blue-700', 'text-white']"></app-button>
+    <app-button
+      text="Add Menu Item"
+      [classList]="['bg-blue-700', 'text-white']"
+      [disabled]="addMode"
+      (click)="onAddMenuItem()"
+    ></app-button>
+    <app-button
+      text="Cancel"
+      actionType="button"
+      [classList]="['bg-red-600', 'text-white']"
+      [style]="{ 'margin-left': '1em' }"
+      *ngIf="addMode"
+      (click)="onCloseMenuItem()"
+    ></app-button>
   </div>
 </div>

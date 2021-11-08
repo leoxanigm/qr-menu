@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { MenuGroup, MenuItem } from 'src/app/shared/menu.interface';
 
 @Component({
   selector: 'app-menu-group',
@@ -6,10 +7,28 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./menu-group.component.scss']
 })
 export class MenuGroupComponent implements OnInit {
+  @Input() menuGroupData!: MenuGroup;
 
-  constructor() { }
+  menuGroupId!: string;
+
+  addMode = false;
+  editMode = false;
+
+  constructor() {}
 
   ngOnInit(): void {
+    this.menuGroupId = <string>this.menuGroupData.id;
   }
 
+  onAddMenuItem() {
+    this.addMode = true;
+  }
+
+  onCloseMenuItem() {
+    this.addMode = false;
+  }
+
+  onEditMode() {
+    this.editMode = !this.editMode;
+  }
 }

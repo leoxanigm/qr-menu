@@ -1,5 +1,8 @@
-import { Component, OnInit } from '@angular/core';
-import { FormControl, FormGroup, NgForm } from '@angular/forms';
+import { Component, Input, OnInit } from '@angular/core';
+import { FormControl, FormGroup } from '@angular/forms';
+import { FormService } from 'src/app/service/form.service';
+import { MenuService } from 'src/app/service/menu-service.service';
+import { MenuItem } from 'src/app/shared/menu.interface';
 
 @Component({
   selector: 'app-menu-item-form',
@@ -7,18 +10,42 @@ import { FormControl, FormGroup, NgForm } from '@angular/forms';
   styleUrls: ['./menu-item-form.component.scss']
 })
 export class MenuItemFormComponent implements OnInit {
-  menuItemForm = new FormGroup({
-    'name': new FormControl(''),
-    'description': new FormControl(''),
-    'price': new FormControl(''),
-    'imgSrc': new FormControl('')
-  });
+  @Input() menuGroupId!: string;
+  @Input() editMode = false;
+  @Input() itemData!: MenuItem;
 
-  constructor() {}
+  submitSuccess = false;
 
-  ngOnInit(): void {}
+  menuItemForm!: FormGroup;
+
+  constructor(private menuService: MenuService, private fS: FormService) {}
+
+  ngOnInit(): void {
+    if (this.editMode) {
+      this.menuItemForm = this.fS.editItemForm(this.itemData);
+    } else {
+      this.menuItemForm = this.fS.newItemForm();
+    }
+  }
 
   onSubmit(): void {
-    console.log(this.menuItemForm.value);
+    if (!this.menuItemForm.valid) {
+      return;
+    }
+
+    if (this.editMode) {
+      this.menuService.editMenuItem(
+        this.menuGroupId,
+        <string>this.itemData.id,
+        {
+          id: this.itemData.id,
+          ...this.menuItemForm.value
+        }
+      );
+    } else {
+      this.menuService.addMenuItem(this.menuGroupId, this.menuItemForm.value);
+    }
+
+    this.menuItemForm.reset();
   }
 }

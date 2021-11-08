@@ -3,8 +3,8 @@
 
   &-img {
     @apply flex-none self-center;
-    /* width: 70px;
-    height: 70px; */
+    
+    max-width: 80px;
   }
 
   &-details {

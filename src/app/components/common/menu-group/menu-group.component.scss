@@ -8,6 +8,8 @@
 
     &-img {
       @apply flex-none self-center;
+
+      max-width: 80px;
     }
 
     &-title {

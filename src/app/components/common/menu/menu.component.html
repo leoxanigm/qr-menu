@@ -1,0 +1,20 @@
+<div class="menu-container">
+  <ng-container *ngFor="let menuGroup of menuGroups">
+    <app-menu-group [menuGroupData]="menuGroup"></app-menu-group>
+  </ng-container>
+  <app-menu-group-form *ngIf="addMode"></app-menu-group-form>
+  <app-button
+    text="Add Menu Group"
+    [classList]="['bg-blue-700', 'text-white']"
+    (click)="onAddMenuGroup()"
+    [disabled]="addMode"
+  ></app-button>
+  <app-button
+    *ngIf="addMode"
+    text="Cancel"
+    actionType="button"
+    [classList]="['bg-red-600', 'text-white']"
+    [style]="{ 'margin-left': '1em' }"
+    (click)="onCloseMenuGroup()"
+  ></app-button>
+</div>

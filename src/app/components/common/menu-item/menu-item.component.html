@@ -1,16 +1,27 @@
+<!-- TO DO: Add cancel button to form and hide card on edit mode -->
 <div class="card">
   <div class="card-img">
-    <img src="https://via.placeholder.com/80" alt="name" />
+    <img [src]="menuItemData.imgSrc" [alt]="menuItemData.name" />
   </div>
   <div class="card-details">
-    <h3 class="card-details-name">Item Name</h3>
+    <h3 class="card-details-name">{{ menuItemData.name }}</h3>
     <p class="card-details-description">
-      Lorem ipsum dolor, sit amet consectetur
+      {{ menuItemData.description }}
     </p>
-    <p class="card-details-price">Price</p>
+    <p class="card-details-price">{{ menuItemData.price }}</p>
   </div>
   <div class="card-actions">
-    <div class="card-actions-edit"><mat-icon>edit</mat-icon></div>
+    <div class="card-actions-edit" (click)="onEdit()">
+      <mat-icon>edit</mat-icon>
+    </div>
     <div class="card-actions-delete"><mat-icon>delete</mat-icon></div>
   </div>
 </div>
+<ng-container>
+  <app-menu-item-form
+    *ngIf="editMode"
+    [menuGroupId]="menuGroupId"
+    [itemData]="menuItemData"
+    [editMode]="editMode"
+  ></app-menu-item-form>
+</ng-container>

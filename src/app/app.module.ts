@@ -19,6 +19,7 @@ import { MenuItemComponent } from './components/common/menu-item/menu-item.compo
 import { MenuGroupComponent } from './components/common/menu-group/menu-group.component';
 import { MenuItemFormComponent } from './components/menu-item-form/menu-item-form.component';
 import { MenuGroupFormComponent } from './components/menu-group-form/menu-group-form.component';
+import { MenuComponent } from './components/common/menu/menu.component';
 
 @NgModule({
   declarations: [
@@ -27,7 +28,8 @@ import { MenuGroupFormComponent } from './components/menu-group-form/menu-group-
     MenuItemComponent,
     MenuGroupComponent,
     MenuItemFormComponent,
-    MenuGroupFormComponent
+    MenuGroupFormComponent,
+    MenuComponent
   ],
   imports: [
     BrowserModule,

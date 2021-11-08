@@ -1,6 +1,8 @@
 .form-container {
   @apply shadow p-2;
 
+  border: 1px solid #ccc;
+
   .form-title {
     @apply mb-2;
   }

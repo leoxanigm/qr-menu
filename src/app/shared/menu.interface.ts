@@ -1,5 +1,6 @@
-export interface Menu {
+export interface MenuItem {
   id?: string;
+  order?: number;
   name?: string;
   imgSrc?: string;
   description?: string;
@@ -8,6 +9,21 @@ export interface Menu {
 
 export interface MenuGroup {
   id?: string;
+  order?: number;
   name?: string;
-  menus?: Menu[];
+  imgSrc?: string;
+  menuItems?: MenuItem[];
+}
+
+export interface Menu {
+  id?: string;
+  options?: MenuOptions;
+  menuGroups?: MenuGroup[];
+}
+
+export interface MenuOptions {
+  [key: string]: any;
+  styles?: {
+    [key: string]: any;
+  };
 }
