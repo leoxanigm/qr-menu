@@ -19,7 +19,9 @@ export class MenuComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.menuGroupSubscription = this.menuService
       .fetchMenu()
-      .subscribe(menuGroupsData => (this.menuGroups = menuGroupsData));
+      .subscribe(menuData => {
+        this.menuGroups = menuData;
+      });
   }
 
   ngOnDestroy(): void {

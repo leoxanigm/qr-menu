@@ -17,7 +17,7 @@ export class MenuGroupFormComponent implements OnInit {
 
   menuGroupForm!: FormGroup;
 
-  constructor(private menuService: MenuService, private fS: FormService) { }
+  constructor(private menuService: MenuService, private fS: FormService) {}
 
   ngOnInit(): void {
     if (this.editMode) {
@@ -33,19 +33,14 @@ export class MenuGroupFormComponent implements OnInit {
     }
 
     if (this.editMode) {
-      // this.menuService.editMenuItem(
-      //   this.menuGroupId,
-      //   <string>this.itemData.id,
-      //   {
-      //     id: this.itemData.id,
-      //     ...this.menuGroupForm.value
-      //   }
-      // );
+      this.menuService.editMenuGroup(
+        <string>this.groupData.id,
+        this.menuGroupForm.value
+      );
     } else {
       this.menuService.addMenuGroup(this.menuGroupForm.value);
     }
 
     this.menuGroupForm.reset();
   }
-
 }

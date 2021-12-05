@@ -1,4 +1,5 @@
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { MenuService } from 'src/app/service/menu-service.service';
 import { MenuGroup, MenuItem } from 'src/app/shared/menu.interface';
 
 @Component({
@@ -14,7 +15,7 @@ export class MenuGroupComponent implements OnInit {
   addMode = false;
   editMode = false;
 
-  constructor() {}
+  constructor(private menuService: MenuService) {}
 
   ngOnInit(): void {
     this.menuGroupId = <string>this.menuGroupData.id;
@@ -30,5 +31,11 @@ export class MenuGroupComponent implements OnInit {
 
   onEditMode() {
     this.editMode = !this.editMode;
+  }
+
+  onDelete() {
+    if (!this.menuGroupId) return;
+
+    this.menuService.deleteMenuGroup(this.menuGroupId);
   }
 }

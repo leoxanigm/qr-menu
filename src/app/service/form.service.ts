@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
+import { Observable, of } from 'rxjs';
 import { MenuGroup, MenuItem } from '../shared/menu.interface';
 import { MenuService } from './menu-service.service';
 
@@ -25,7 +26,7 @@ export class FormService {
       'name': new FormControl(menuItemData.name),
       'description': new FormControl(menuItemData.description),
       'price': new FormControl(menuItemData.price),
-      'imgSrc': new FormControl(menuItemData.imgSrc)
+      'imgSrc': new FormControl('')
     });
   }
 
@@ -39,7 +40,7 @@ export class FormService {
   editGroupForm(menuGroupData: MenuGroup): FormGroup {
     return new FormGroup({
       'name': new FormControl(menuGroupData.name),
-      'imgSrc': new FormControl(menuGroupData.imgSrc)
+      'imgSrc': new FormControl('')
     });
   }
 }

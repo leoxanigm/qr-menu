@@ -1,12 +1,12 @@
 import { Injectable } from '@angular/core';
-import { AngularFirestore } from '@angular/fire/compat/firestore';
-import { Observable, of } from 'rxjs';
 import {
-  Menu,
-  MenuGroup,
-  MenuItem,
-  MenuOptions
-} from '../shared/menu.interface';
+  AngularFirestore,
+  AngularFirestoreDocument
+} from '@angular/fire/compat/firestore';
+import { AngularFireStorage } from '@angular/fire/compat/storage';
+import { from, Observable } from 'rxjs';
+import { MenuGroup, MenuItem, MenuOptions } from '../shared/menu.interface';
+import { FirebaseService } from '../service/firebase.service';
 
 @Injectable({
   providedIn: 'root'
@@ -16,55 +16,30 @@ export class MenuService {
   menuOptions!: MenuOptions;
   menuGroups: MenuGroup[] = [];
 
-  constructor(private firebase: AngularFirestore) {}
+  menuDoc!: AngularFirestoreDocument;
 
-  fetchMenu(): Observable<MenuGroup[]> {
-    this.firebase
-      .collection('menus')
-      .doc(this.menuId)
-      .collection('menu-groups')
-      .get()
-      .subscribe(menuGroupDocs => {
-        menuGroupDocs.forEach(menuGroupDoc => {
-          // Get document reference for each document in 'menu-groups'
-          const menuGroupDocRef = menuGroupDoc.ref;
+  constructor(
+    private firebase: AngularFirestore,
+    private storage: AngularFireStorage,
+    private firebaseService: FirebaseService
+  ) {
+    this.menuDoc = this.firebase.collection('menus').doc(this.menuId);
 
-          // Set up the parent menu group object
-          const menuGroup: MenuGroup = {
-            id: menuGroupDoc.id,
-            menuItems: [],
-            ...menuGroupDoc.data()
-          };
-
-          // Get each menu in 'menu-groups' reference and add is to the parent menu group
-          menuGroupDocRef
-            .collection('menu-items')
-            .get()
-            .then(menuItems => {
-              menuItems.forEach(menuItem => {
-                const menuItemData: MenuItem = {
-                  id: menuItem.id,
-                  ...menuItem.data()
-                };
-                menuGroup.menuItems?.push(menuItemData);
-              });
-
-              // Sort menu items in there added order
-              menuGroup.menuItems = this.sortMenu(menuGroup.menuItems);
-            })
-            .catch(err => {
-              console.error(err);
-            });
-
-          // Push each menu group data to the main menu group array
-          this.menuGroups.push(menuGroup);
-          this.menuGroups = this.sortMenu(this.menuGroups);
-        });
-      });
-    return of(this.menuGroups);
+    this.firebaseService.fetchMenu(this.menuId);
   }
 
-  addMenuItem(menuGroupId: string, menuItem: MenuItem): void {
+  fetchMenu(): Observable<MenuGroup[]> {
+    return from(
+      this.firebaseService.fetchMenuGroups().then(resp => {
+        this.menuGroups = resp;
+        return this.menuGroups;
+      })
+    );
+  }
+
+  addMenuItem(menuGroupId: string, menuItem: MenuItem, imgBlob: File): void {
+    if (this.menuDoc == undefined) return;
+
     // Set the order of the newly added Item
     let order = 0;
 
@@ -76,31 +51,31 @@ export class MenuService {
       }
     }
 
-    const menuItemData = {
-      order: order,
-      ...menuItem
-    };
+    this.uploadImg(menuGroupId, menuItem, imgBlob).then(itemData => {
+      const menuItemData = {
+        order: order,
+        ...itemData
+      };
 
-    this.firebase
-      .collection('menus')
-      .doc(this.menuId)
-      .collection('menu-groups')
-      .doc(menuGroupId)
-      .collection('menu-items')
-      .add(menuItemData)
-      .then(docRef => {
-        // console.log('Document written with ID: ', docRef.id);
-        for (let i = 0; i < this.menuGroups.length; i++) {
-          if (menuGroupId === this.menuGroups[i].id) {
-            this.menuGroups[i].menuItems?.push({
-              id: docRef.id,
-              ...menuItem
-            });
-            break;
+      this.menuDoc
+        .collection('menu-groups')
+        .doc(menuGroupId)
+        .collection('menu-items')
+        .add(menuItemData)
+        .then(docRef => {
+          // console.log('Document written with ID: ', docRef.id);
+          for (let i = 0; i < this.menuGroups.length; i++) {
+            if (menuGroupId === this.menuGroups[i].id) {
+              this.menuGroups[i].menuItems?.push({
+                id: docRef.id,
+                ...menuItemData
+              });
+              break;
+            }
           }
-        }
-      })
-      .catch(err => console.error('Error writing document: ', err));
+        })
+        .catch(err => console.error('Error writing document: ', err));
+    });
   }
 
   editMenuItem(
@@ -108,9 +83,9 @@ export class MenuService {
     menuItemID: string,
     menuItem: MenuItem
   ): void {
-    this.firebase
-      .collection('menus')
-      .doc(this.menuId)
+    if (this.menuDoc == undefined) return;
+
+    this.menuDoc
       .collection('menu-groups')
       .doc(menuGroupId)
       .collection('menu-items')
@@ -133,7 +108,35 @@ export class MenuService {
       .catch(err => console.error('Error writing document: ', err));
   }
 
+  deleteMenuItem(menuGroupId: string, menuItemID: string): void {
+    if (this.menuDoc == undefined) return;
+
+    this.menuDoc
+      .collection('menu-groups')
+      .doc(menuGroupId)
+      .collection('menu-items')
+      .doc(menuItemID)
+      .delete()
+      .then(() => {
+        for (let i = 0; i < this.menuGroups.length; i++) {
+          if (menuGroupId === this.menuGroups[i].id) {
+            const itemArr = <MenuItem[]>this.menuGroups[i].menuItems;
+
+            for (let j = 0; j < itemArr.length; j++) {
+              if (itemArr[j].id === menuItemID) {
+                itemArr.splice(j, 1);
+              }
+              break;
+            }
+          }
+        }
+      })
+      .catch(err => console.error('Error writing document: ', err));
+  }
+
   addMenuGroup(menuGroup: MenuGroup): void {
+    if (this.menuDoc == undefined) return;
+
     // Set the order of the newly added Item
     let order = this.menuGroups.length;
 
@@ -142,9 +145,7 @@ export class MenuService {
       ...menuGroup
     };
 
-    this.firebase
-      .collection('menus')
-      .doc(this.menuId)
+    this.menuDoc
       .collection('menu-groups')
       .add(menuGroupData)
       .then(docRef => {
@@ -158,37 +159,97 @@ export class MenuService {
   }
 
   editMenuGroup(menuGroupId: string, menuGroup: MenuGroup): void {
-    this.firebase
-      .collection('menus')
-      .doc(this.menuId)
+    if (this.menuDoc == undefined) return;
+
+    this.menuDoc
       .collection('menu-groups')
       .doc(menuGroupId)
       .update(menuGroup)
       .then(() => {
         for (let i = 0; i < this.menuGroups.length; i++) {
           if (menuGroupId === this.menuGroups[i].id) {
-            this.menuGroups[i] = menuGroup;
+            this.menuGroups[i].name = menuGroup.name;
+            this.menuGroups[i].imgSrc = menuGroup.imgSrc;
           }
         }
       })
       .catch(err => console.error('Error writing document: ', err));
   }
 
-  ///////////////////////////////////////////////////////
-  // Helper functions
-  private sortMenu(menuArray: any[] | undefined): any[] {
-    if (menuArray == undefined) {
-      return [];
-    }
+  deleteMenuGroup(menuGroupId: string): void {
+    if (this.menuDoc == undefined) return;
 
-    return menuArray.sort((a, b) => {
-      if (a.order - b.order < 0) {
-        return -1;
-      } else if (a.order - b.order > 0) {
-        return 1;
-      } else {
-        return 0;
+    // Get document reference for the main main group
+    const docRef = this.menuDoc.collection('menu-groups').doc(menuGroupId);
+
+    docRef
+      .collection('menu-items')
+      .ref.get()
+      .then(menuItems => {
+        menuItems.forEach(menuItem => {
+          menuItem.ref.delete();
+        });
+      })
+      .then(() => {
+        for (let i = 0; i < this.menuGroups.length; i++) {
+          if (menuGroupId === this.menuGroups[i].id) {
+            this.menuGroups.splice(i, 1);
+          }
+        }
+
+        // Finally delete the whole document
+        docRef.delete();
+      })
+      .catch(err => {
+        console.error(err);
+      });
+  }
+
+  //
+  //
+  // TO DO: Redesign form to accomodate image upload and update
+  //        Change button text depending on add and edit
+  //        Add cancel button to forms
+  //
+  //
+
+  uploadImg(
+    menuGroupID: string,
+    data: MenuItem | MenuGroup,
+    file: File
+  ): Promise<MenuItem | MenuGroup> {
+    const uploadPromise = new Promise<MenuItem | MenuGroup>(
+      (resolve, reject) => {
+        if (file?.name) {
+          const menuRef = this.storage.storage.ref().child(this.menuId);
+          let fileRef;
+
+          if (menuGroupID) {
+            const menuGroupRef = menuRef.child(menuGroupID);
+            fileRef = menuGroupRef.child(file.name);
+          } else {
+            fileRef = menuRef.child(file.name);
+          }
+
+          fileRef.put(file).then(snapshot => {
+            snapshot.ref.getDownloadURL().then(url => {
+              resolve({
+                ...data,
+                imgSrc: url,
+                imgRef: snapshot.ref.fullPath
+              });
+            });
+          });
+        } else {
+          resolve({
+            ...data,
+            imgSrc: '',
+            imgRef: null
+          });
+        }
       }
-    });
+    );
+
+    return uploadPromise;
   }
 }

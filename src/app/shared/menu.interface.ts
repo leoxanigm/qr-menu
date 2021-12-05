@@ -5,6 +5,8 @@ export interface MenuItem {
   imgSrc?: string;
   description?: string;
   price?: string;
+
+  imgRef?: string | null;
 }
 
 export interface MenuGroup {
@@ -13,6 +15,8 @@ export interface MenuGroup {
   name?: string;
   imgSrc?: string;
   menuItems?: MenuItem[];
+
+  imgRef?: string | null;
 }
 
 export interface Menu {

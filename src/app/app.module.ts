@@ -11,6 +11,7 @@ import { MaterialModules } from './shared/materials.module';
 import { ReactiveFormsModule } from '@angular/forms';
 import { AngularFireModule } from '@angular/fire/compat';
 import { AngularFirestoreModule } from '@angular/fire/compat/firestore';
+import { AngularFireStorageModule } from '@angular/fire/compat/storage';
 
 // Components
 import { AppComponent } from './app.component';
@@ -38,7 +39,8 @@ import { MenuComponent } from './components/common/menu/menu.component';
     MaterialModules,
     ReactiveFormsModule,
     AngularFireModule.initializeApp(environment.firebase),
-    AngularFirestoreModule
+    AngularFirestoreModule,
+    AngularFireStorageModule
   ],
   providers: [],
   bootstrap: [AppComponent]

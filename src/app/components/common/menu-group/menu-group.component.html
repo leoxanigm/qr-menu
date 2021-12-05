@@ -10,7 +10,9 @@
       <div class="card-header-actions-edit" (click)="onEditMode()">
         <mat-icon>edit</mat-icon>
       </div>
-      <div class="card-header-actions-delete"><mat-icon>delete</mat-icon></div>
+      <div class="card-header-actions-delete" (click)="onDelete()">
+        <mat-icon>delete</mat-icon>
+      </div>
     </div>
   </div>
 
@@ -32,10 +34,9 @@
       ></app-menu-item>
     </ng-container>
 
-    <app-menu-item-form
-      *ngIf="addMode"
-      [menuGroupId]="menuGroupId"
-    ></app-menu-item-form>
+    <ng-container *ngIf="addMode">
+      <app-menu-item-form [menuGroupId]="menuGroupId"></app-menu-item-form>
+    </ng-container>
   </div>
   <div class="card-button">
     <app-button
